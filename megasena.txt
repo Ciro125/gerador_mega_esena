@@ -1,0 +1,29 @@
+function Gerar-NumerosAleatorios {
+    param (
+        [int]$qtdNumeros,
+        [int]$inicioIntervalo,
+        [int]$fimIntervalo,
+        [string]$numerosFixos = ""
+    )
+
+    # Converter a string de números fixos em uma lista de inteiros
+    $numerosFixosList = @()
+    if ($numerosFixos -ne "") {
+        $numerosFixosList = $numerosFixos -split ' ' | ForEach-Object { [int]$_ }
+    }
+
+    # Gerar números aleatórios restantes
+    $numerosGerados = @($numerosFixosList)
+    while ($numerosGerados.Count -lt $qtdNumeros) {
+        $numeroAleatorio = Get-Random -Minimum $inicioIntervalo -Maximum ($fimIntervalo + 1)
+        if ($numeroAleatorio -notin $numerosGerados) {
+            $numerosGerados += $numeroAleatorio
+        }
+    }
+
+    # Ordenar os números gerados e retornar
+    $numerosGerados | Sort-Object
+}
+
+# Exemplo de uso:
+Gerar-NumerosAleatorios -qtdNumeros 7 -inicioIntervalo 1 -fimIntervalo 60 -numerosFixos "7 9"
